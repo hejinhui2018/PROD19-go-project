@@ -34,13 +34,13 @@ func (w Workflow) Protect(id string, lock safety.LockCheck) (domain.Blockade, er
 	if e != nil {
 		return b, e
 	}
-	if e = w.Service.Transition(id, domain.StateProtected); e != nil {
-		return b, e
-	}
 	if e = safety.VerifyLockPack(b.Locks, lock); e != nil {
 		return b, e
 	}
 	if e = w.Service.VerifySafety(id); e != nil {
+		return b, e
+	}
+	if e = w.Service.Transition(id, domain.StateProtected); e != nil {
 		return b, e
 	}
 	return w.Service.Get(id)
