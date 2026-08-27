@@ -17,9 +17,6 @@ func VerifyReplay(events []domain.Event) (ReplayReport, error) {
 	seen := map[string]bool{}
 	var last int64
 	for _, e := range events {
-		if e.Type == domain.EventObservation {
-			continue
-		}
 		r.Events++
 		if e.Number <= last {
 			r.Errors = append(r.Errors, fmt.Sprintf("event order at %d", e.Number))

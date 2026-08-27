@@ -76,9 +76,6 @@ func (s *EventStore) Load() ([]domain.Event, error) {
 		if json.Unmarshal(sc.Bytes(), &ev) != nil {
 			return nil, domain.ErrCorrupt
 		}
-		if ev.Type == domain.EventObservation {
-			continue
-		}
 		out = append(out, ev)
 	}
 	return out, sc.Err()
