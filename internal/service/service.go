@@ -64,11 +64,10 @@ func (s *Service) Transition(id string, to domain.State) error {
 	if !allowed(b.State, to) {
 		return fmt.Errorf("%w: %s to %s", domain.ErrConflict, b.State, to)
 	}
-	notification := domain.Event{Type: domain.EventTransition, BlockadeID: b.ID, Payload: b}
 	b.State = to
 	b.Version++
 	b.UpdatedAt = s.clk.Now()
-	notification.At = b.UpdatedAt
+	notification := domain.Event{Type: domain.EventTransition, BlockadeID: b.ID, Payload: b, At: b.UpdatedAt}
 	if e := s.persist("transition", b); e != nil {
 		return e
 	}
